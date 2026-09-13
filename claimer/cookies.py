@@ -14,27 +14,39 @@ def load_cookies() -> list[dict]:
         pass
     return []
 
-def validate_cookies(cookies: list[dict]) -> bool:
+async def validate_cookies(cookies: list[dict]) -> bool:
     if not cookies:
         return False
-        
-    url = "https://egs-platform-service.store.epicgames.com/api/v1/private/egs/account/subscriptions"
-    
-    # Extract cookies for httpx
-    # Need to match the domain, but for simplicity we can just pass them if they are epicgames.com cookies
-    cookie_jar = httpx.Cookies()
-    for cookie in cookies:
-        if "epicgames.com" in cookie.get("domain", ""):
-            cookie_jar.set(cookie["name"], cookie["value"], domain=cookie["domain"])
-            
-    with httpx.Client(cookies=cookie_jar, timeout=10.0) as client:
-        try:
-            response = client.get(url, params={"count": 1, "start": 0})
-            if response.status_code == 200:
-                return True
-        except Exception as e:
-            print(f"Cookie validation error: {e}")
-    return False
+
+    from playwright.async_api import async_playwright
+
+    try:
+        async with async_playwright() as p:
+            browser = await p.chromium.launch(headless=True)
+            context = await browser.new_context(
+                user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
+                viewport={"width": 1280, "height": 720},
+            )
+            await context.add_cookies(cookies)
+            page = await context.new_page()
+            try:
+                await page.goto(
+                    "https://www.epicgames.com/account/v2/personal-info",
+                    wait_until="domcontentloaded",
+                    timeout=45000,
+                )
+                await page.wait_for_timeout(2500)
+                url = page.url
+                logged_in = "account" in url and "login" not in url and "/id/" not in url
+                await browser.close()
+                return logged_in
+            except Exception as e:
+                print(f"Cookie validation error: {e}")
+                await browser.close()
+                return False
+    except Exception as e:
+        print(f"Cookie validation error: {e}")
+        return False
 
 def save_cookies(cookies: list[dict]):
     cookies_str = json.dumps(cookies)

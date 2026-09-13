@@ -8,7 +8,7 @@ from claimer.browser import claim_game
 async def main():
     cookies = load_cookies()
     
-    if not validate_cookies(cookies):
+    if not await validate_cookies(cookies):
         print("Cookies are missing or invalid.")
         send_login_prompt(games=[])
         return
