@@ -2,7 +2,7 @@ import asyncio
 from claimer.cookies import load_cookies, validate_cookies, save_cookies, sync_github_secret
 from claimer.promotions import get_free_games
 from claimer.state import is_claimed, mark_claimed
-from claimer.telegram import send_login_prompt, send_message
+from claimer.email import send_login_prompt, send_message
 from claimer.browser import claim_game
 
 async def main():

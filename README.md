@@ -23,7 +23,7 @@ Set it up once, push it to GitHub Actions, and let it build your library effortl
 - **Automated Claiming Engine**: Silently fetches, filters, and purchases 100% discounted games every week.
 - **Zero-Touch Auth**: Operates exclusively on active session cookies. No usernames, no passwords, and no manual CAPTCHA solving during the automated runs.
 - **Auto-Updating Secrets**: Features an elegant local extraction script that instantly connects to your active browser, grabs the session, and uses the `gh` CLI to seamlessly re-encrypt and push your cookies to GitHub Secrets.
-- **Telegram Integrations**: Stay informed with rich notifications on successful claims, and get instant fallback alerts if your session expires or encounters a strict CAPTCHA challenge.
+- **Email Notifications**: Stay informed with rich notifications on successful claims, and get instant fallback alerts if your session expires or encounters a strict CAPTCHA challenge.
 - **State Awareness**: Persists claim history directly to the repository to avoid redundant network requests.
 
 ---
@@ -60,8 +60,9 @@ To run this autonomously, ensure your repository has the following secrets confi
 | Secret Name | Description |
 | :--- | :--- |
 | `EPIC_COOKIES` | Your session cookies *(auto-configured by the script if `gh` CLI is present)* |
-| `TELEGRAM_BOT_TOKEN` | Token provided by [@BotFather](https://t.me/botfather) |
-| `TELEGRAM_CHAT_ID` | Your personal Telegram Chat ID |
+| `EMAIL_USER` | Sender email address (e.g. your 163 mailbox) |
+| `EMAIL_PASSWORD` | SMTP authorization code (163 授权码, **not** your login password) |
+| `EMAIL_TO` | Recipient email address for notifications |
 | `GITHUB_TOKEN` | A Personal Access Token (PAT) with `repo` scope to allow the bot to self-update cookies if needed |
 
 ### 4. Autonomous Execution
