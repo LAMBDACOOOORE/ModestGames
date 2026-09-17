@@ -63,7 +63,7 @@ To run this autonomously, ensure your repository has the following secrets confi
 | `EMAIL_USER` | Sender email address (e.g. your 163 mailbox) |
 | `EMAIL_PASSWORD` | SMTP authorization code (163 授权码, **not** your login password) |
 | `EMAIL_TO` | Recipient email address for notifications |
-| `GITHUB_TOKEN` | A Personal Access Token (PAT) with `repo` scope to allow the bot to self-update cookies if needed |
+| `GH_PAT` | A Personal Access Token (PAT) with `repo` scope (or fine-grained "Actions" read-write) to allow the bot to self-update the `EPIC_COOKIES` secret |
 
 ### 4. Autonomous Execution
 Once your secrets are set, the workflow will automatically execute:
